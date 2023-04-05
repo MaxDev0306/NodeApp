@@ -1,1 +1,3 @@
 smtp4dev-data
+postgres-data
+backend/node_modules

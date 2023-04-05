@@ -19,7 +19,18 @@ services:
             - RelayOptions__Login=admin
             - RelayOptions__Password=admin
 
-networks:
-    network1:
-        name: global-network
-        external: true
+    postgres:
+        container_name: postgresDB
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: admin
+            POSTGRES_USER: admin
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
+
+
+    pgAdmin4:
+        container_name: postgresAdminer
+        image: dpage/pgadmin4
+        ports:
+            - "8080:8080"
