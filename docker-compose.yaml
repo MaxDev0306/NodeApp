@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+    smtp4dev:
+        container_name: smtp4dev
+        image: rnwood/smtp4dev:v3
+        ports:
+            - '5000:80' # WebInterface
+            - '5001:25' # SMTP server
+            - '5002:143' # IMAP server
+        volumes:
+            - ./smtp4dev-data:/smtp4dev
+        environment:
+            - ServerOptions__BasePath=/
+            - ServerOptions__HostName=smtp4dev
+            - RelayOptions__SmtpPort=5003
+            - RelayOptions__ImapPort=5004
+            - RelayOptions__Login=admin
+            - RelayOptions__Password=admin
+
+networks:
+    network1:
+        name: global-network
+        external: true
