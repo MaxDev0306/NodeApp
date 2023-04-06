@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
 
-    smtp4dev:
-        container_name: smtp4dev
+    fakeSmtp:
+        container_name: fakeSmtpServer
         image: rnwood/smtp4dev:v3
         ports:
             - '5000:80' # WebInterface
@@ -21,16 +21,32 @@ services:
 
     postgres:
         container_name: postgresDB
-        image: postgres
+        image: postgres:15
         environment:
             POSTGRES_PASSWORD: admin
             POSTGRES_USER: admin
         volumes:
             - ./postgres-data:/var/lib/postgresql/data
-
-
-    pgAdmin4:
-        container_name: postgresAdminer
-        image: dpage/pgadmin4
         ports:
-            - "8080:8080"
+            - "5432:5432"
+
+
+    pgAdmin:
+        container_name: postgresAdminer
+        image: dpage/pgadmin4:6.21
+        ports:
+            - "8080:80"
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=admin@mail.de
+            - PGADMIN_DEFAULT_PASSWORD=admin
+
+    node:
+        container_name: node_server
+        build:
+            context: backend
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+        stdin_open: true
+        volumes:
+            - ./backend:/usr/src/app/
